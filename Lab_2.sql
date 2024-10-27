@@ -79,7 +79,11 @@ from buildings as buildingC
 cross join buildings as buildingB
 where buildingC.name = 'BuildingC' and buildingB.name = 'BuildingB';
 
---g do poprawy
-select st_centroid(b.geometry) as centroid, st_y(st_centroid(b.geometry)) from buildings as b
-cross join roads as r
-where st_y(st_centroid(b.geometry)) > (select geometry from roads where name='RoadX');
+--g
+select b.name, st_centroid(b.geometry) as centroid, st_y(st_centroid(b.geometry)) as latitude from buildings as b
+where st_y(st_centroid(b.geometry)) > (select st_y(st_centroid(geometry)) from roads where name='RoadX');
+
+--h
+select st_area(st_symdifference(geometry, 'POLYGON((4 7, 6 7, 6 8, 4 8, 4 7))'))
+from buildings 
+where name='BuildingC';
