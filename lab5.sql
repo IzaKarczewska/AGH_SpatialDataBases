@@ -1,6 +1,7 @@
 create database lab5;
 -- create extension postgis; tu niepotrzebne
 
+
 -- ZAD 1
 create table obiekty (
     id serial primary KEY,
@@ -55,14 +56,18 @@ select * from obiekty;
 select 
 	st_area(st_buffer(st_shortestLine(
 		(select geometria from obiekty where nazwa='obiekt3'),
-		(select geometria from obiekty where nazwa='obiekt4')), 5))
-from obiekty;
+		(select geometria from obiekty where nazwa='obiekt4')), 5)) as pole
+from obiekty
+limit 1;
+
 
 -- ZAD 3
 -- Poligon musi być  obiektem domkniętym, brakuje nam puktu końcowego takiego samego jak początkowy
 update obiekty 
-set geometria = st_GeomFromText(st_polygon('LINESTRING(20.5 19.5, 22 19, 26 21, 25 22, 27 24, 25 25, 20 20, 20.5 19.5)'))
-where nazwa="obiekt4";
+set geometria = st_MakePolygon('LINESTRING(20.5 19.5, 22 19, 26 21, 25 22, 27 24, 25 25, 20 20, 20.5 19.5)')
+where nazwa='obiekt4';
+
+select * from obiekty where id=4;
 
 -- ZAD 4
 insert into obiekty(nazwa, geometria) values
